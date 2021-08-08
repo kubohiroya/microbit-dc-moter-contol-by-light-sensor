@@ -10,7 +10,7 @@ function 加速度を更新 () {
     }
 }
 input.onButtonPressed(Button.A, function () {
-    回転スタート()
+    回転スタート(true)
 })
 function 速度を更新 () {
     速度 += 加速度
@@ -36,16 +36,16 @@ function 回転残カウントを更新 () {
         回転残カウント = 0
     }
 }
-function 回転スタート () {
-    if (input.lightLevel() >= 1) {
-        明るさセンサー残カウント = 明るさセンサー残カウント初期値
-    } else {
+function 回転スタート (真偽値: boolean) {
+    if (真偽値) {
         if (明るさセンサー残カウント > 0) {
             明るさセンサー残カウント += -1
             回転残カウント = 回転残カウント初期値
         } else {
             明るさセンサー残カウント = 0
         }
+    } else {
+        明るさセンサー残カウント = 明るさセンサー残カウント初期値
     }
 }
 function 回転残カウント割合表示 (数値: number) {
@@ -59,8 +59,8 @@ function 回転残カウント割合表示 (数値: number) {
         }
     }
 }
-let 加速度 = 0
 let 速度 = 0
+let 加速度 = 0
 let 加速度の初期値 = 0
 let 加減速カウント = 0
 let 明るさセンサー残カウント = 0
@@ -74,9 +74,10 @@ pins.digitalWritePin(DigitalPin.P14, 1)
 明るさセンサー残カウント = 明るさセンサー残カウント初期値
 加減速カウント = 20
 加速度の初期値 = 60
+加速度 = 0
 速度 = 0
 loops.everyInterval(100, function () {
-    回転スタート()
+    回転スタート(input.lightLevel() < 1)
     加速度を更新()
     速度を更新()
     回転(速度)
